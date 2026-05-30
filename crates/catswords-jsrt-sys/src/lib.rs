@@ -32,6 +32,28 @@ pub enum JsErrorCode {
 }
 
 #[repr(C)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum JsParseScriptAttributes {
+        /// <summary>
+        ///     Default attribute
+        /// </summary>
+        None = 0x0,
+        /// <summary>
+        ///     Specified script is internal and non-user code. Hidden from debugger
+        /// </summary>
+        LibraryCode = 0x1,
+        /// <summary>
+        ///     ChakraCore assumes ExternalArrayBuffer is Utf8 by default.
+        ///     This one needs to be set for Utf16
+        /// </summary>
+        ArrayBufferIsUtf16Encoded = 0x2,
+        /// <summary>
+        ///     Script should be parsed in strict mode
+        /// </summary>
+        StrictMode = 0x4,
+}
+
+#[repr(C)]
 #[derive(Clone, Copy, Debug)]
 pub enum JsRuntimeAttributes {
     None = 0,
@@ -64,10 +86,11 @@ extern "C" {
     pub fn JsSetCurrentContext(context: JsContextRef) -> JsErrorCode;
     pub fn JsGetCurrentContext(current_context: *mut JsContextRef) -> JsErrorCode;
 
-    pub fn JsRunScript(
+    pub fn JsRun(
         script: *const u16,
         source_context: JsSourceContext,
         source_url: *const u16,
+        parseAttributes: JsParseScriptAttributes,
         result: *mut JsValueRef,
     ) -> JsErrorCode;
 
@@ -120,4 +143,17 @@ extern "C" {
     pub fn JsGetUndefinedValue(undefined_value: *mut JsValueRef) -> JsErrorCode;
     pub fn JsGetNullValue(null_value: *mut JsValueRef) -> JsErrorCode;
     pub fn JsSetException(exception: JsValueRef) -> JsErrorCode;
+}
+
+pub unsafe fn JsRunScript(
+    script: *const u16,
+    source_context: JsSourceContext,
+    source_url: *const u16,
+    result: *mut JsValueRef,
+) -> JsErrorCode {
+    return JsRun(
+        script
+        , source_context
+        , source_url
+        , JsParseScriptAttributes::None, result);
 }
