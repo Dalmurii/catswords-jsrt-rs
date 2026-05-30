@@ -31,6 +31,7 @@ fn main() {
             .build()
             ;
 
+        println!("cargo:rustc-link-search=native={}/build/", dst.display());
         println!("cargo:rustc-link-search=native={}/build/bin/ChakraCore", dst.display());
         println!("cargo:rustc-link-lib=dylib=ChakraCore");
         println!("cargo:rustc-link-lib=dylib=stdc++");
