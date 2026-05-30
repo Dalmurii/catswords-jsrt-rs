@@ -27,12 +27,12 @@ fn main() {
             .define("CMAKE_CXX_COMPILER", "clang++")
             .define("CMAKE_ASM_COMPILER", "clang")
             .env("NUM_JOBS", "30")
-            .build_target("ChakraCore")
+            .build_target("ChakraCoreStatic")
             .build()
             ;
 
         println!("cargo:rustc-link-search=native={}/build/lib", dst.display());
-        println!("cargo:rustc-link-lib=dylib=ChakraCore");
+        println!("cargo:rustc-link-lib=static=ChakraCoreStatic");
         println!("cargo:rustc-link-lib=dylib=stdc++");
         println!("cargo:rustc-link-lib=dylib=icuuc");
         println!("cargo:rustc-link-lib=dylib=icui18n");
