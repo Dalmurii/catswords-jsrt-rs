@@ -87,9 +87,9 @@ extern "C" {
     pub fn JsGetCurrentContext(current_context: *mut JsContextRef) -> JsErrorCode;
 
     pub fn JsRun(
-        script: *const u16,
+        script: JsValueRef,
         source_context: JsSourceContext,
-        source_url: *const u16,
+        source_url: JsValueRef, 
         parseAttributes: JsParseScriptAttributes,
         result: *mut JsValueRef,
     ) -> JsErrorCode;
@@ -145,15 +145,3 @@ extern "C" {
     pub fn JsSetException(exception: JsValueRef) -> JsErrorCode;
 }
 
-pub unsafe fn JsRunScript(
-    script: *const u16,
-    source_context: JsSourceContext,
-    source_url: *const u16,
-    result: *mut JsValueRef,
-) -> JsErrorCode {
-    return JsRun(
-        script
-        , source_context
-        , source_url
-        , JsParseScriptAttributes::None, result);
-}
